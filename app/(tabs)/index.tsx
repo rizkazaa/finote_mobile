@@ -1,75 +1,159 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
+import { BudgetCard } from '@/components/BudgetCard';
+import { CategoryCard } from '@/components/CategoryCard';
+import { Header } from '@/components/Header';
+import { SectionHeader } from '@/components/SectionHeader';
 import { ThemedView } from '@/components/ThemedView';
+import { TransactionItem } from '@/components/TransactionItem';
 
 export default function HomeScreen() {
+  const handleProfilePress = () => {
+    console.log('Profile pressed');
+  };
+
+  const handleAddCategory = () => {
+    console.log('Add category pressed');
+  };
+
+  const handleViewAllTransactions = () => {
+    console.log('View all transactions pressed');
+  };
+
+  const handleCategoryPress = (category: string) => {
+    console.log(`${category} category pressed`);
+  };
+
+  const handleTransactionPress = (transaction: string) => {
+    console.log(`${transaction} transaction pressed`);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ThemedView style={styles.container} lightColor="#f8f9fa" darkColor="#f8f9fa">
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        {/* Header */}
+        <Header
+          title="FINOTE"
+          showProfile={true}
+          onProfilePress={handleProfilePress}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Budget Card */}
+          <BudgetCard
+            title="Monthly Budget"
+            amount="Rp 2,500,000"
+            spent="Rp 1,225,000 spent"
+            percentage={49}
+            remaining="Rp 1,275,000"
+            dailyAvg="Rp 40,830"
+          />
+
+          {/* Categories Section */}
+          <SectionHeader
+            title="Categories"
+            actionText="Add New"
+            onActionPress={handleAddCategory}
+          />
+
+          <View style={styles.categoriesGrid}>
+            <CategoryCard
+              title="Food"
+              amount="Rp 450,000"
+              icon="restaurant"
+              color="#8B4513"
+              onPress={() => handleCategoryPress('Food')}
+            />
+            <CategoryCard
+              title="Transport"
+              amount="Rp 320,000"
+              icon="car"
+              color="#A0522D"
+              onPress={() => handleCategoryPress('Transport')}
+            />
+            <CategoryCard
+              title="Health"
+              amount="Rp 180,000"
+              icon="medical"
+              color="#8B4513"
+              onPress={() => handleCategoryPress('Health')}
+            />
+            <CategoryCard
+              title="Shopping"
+              amount="Rp 275,000"
+              icon="bag"
+              color="#A0522D"
+              onPress={() => handleCategoryPress('Shopping')}
+            />
+          </View>
+
+          {/* Recent Transactions */}
+          <SectionHeader
+            title="Recent"
+            actionText="View All"
+            onActionPress={handleViewAllTransactions}
+          />
+
+          <View style={styles.transactionsContainer}>
+            <TransactionItem
+              title="Lunch at cafe"
+              subtitle="Dec 01, 09:14"
+              amount="-Rp 25,000"
+              icon="restaurant"
+              iconColor="#FF6B6B"
+              onPress={() => handleTransactionPress('Lunch at cafe')}
+            />
+            <TransactionItem
+              title="Groceries"
+              subtitle="Nov 30, 18:22"
+              amount="-Rp 85,000"
+              icon="basket"
+              iconColor="#4ECDC4"
+              onPress={() => handleTransactionPress('Groceries')}
+            />
+            <TransactionItem
+              title="Pharmacy"
+              subtitle="Nov 29, 14:30"
+              amount="-Rp 45,000"
+              icon="medical"
+              iconColor="#45B7D1"
+              onPress={() => handleTransactionPress('Pharmacy')}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  categoriesGrid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginHorizontal: -6,
+    marginBottom: 24,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  transactionsContainer: {
+    marginBottom: 20,
   },
 });
